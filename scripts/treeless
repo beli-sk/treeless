@@ -1,0 +1,50 @@
+#!/usr/bin/env python
+#
+# Treeless - Text mode directory tree viewer
+#
+# Copyright 2013 Michal Belica <devel@beli.sk>
+#
+# This file is part of Treeless.
+# 
+# Treeless is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# Treeless is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with Treeless.  If not, see <http://www.gnu.org/licenses/>.
+
+import argparse
+from treeless import output_tree, less_control, __version__
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+            description='Treeless - Text mode directory tree viewer')
+    parser.add_argument('--filematch', '-f', default=None, metavar='REGEXP',
+            help='Files regexp')
+    parser.add_argument('--dirmatch', '-d', default=None, metavar='REGEXP',
+            help='Directories regexp')
+    parser.add_argument('--fileignore', '-F', default=None, metavar='REGEXP',
+            help='Regexp for ignored files')
+    parser.add_argument('--dirignore', '-D', default=None, metavar='REGEXP',
+            help='Regexp for ignored directories')
+    parser.add_argument('--indent', '-i', type=int, choices=xrange(1,9),
+            default=1, metavar='N', help='Indent length (1-8, default=1)')
+    parser.add_argument('--plain', '-p', action='store_true',
+            help='Plain output on stdout, no less')
+    parser.add_argument('--cut', '-c', action='store_true',
+            help='Cut off long lines to fit terminal width')
+    parser.add_argument('--version', '-v', action='version',
+            version='Treeless ' + __version__,
+            help='Show version and exit')
+    config = parser.parse_args()
+    if config.plain:
+        output_tree(config)
+    else:
+        less_control(config)
+

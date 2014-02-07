@@ -1,0 +1,3 @@
+#command
+^R quit A
+C quit B
