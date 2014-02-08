@@ -35,6 +35,8 @@ if __name__ == '__main__':
             help='Regexp for ignored directories')
     parser.add_argument('--indent', '-i', type=int, choices=xrange(1,9),
             default=1, metavar='N', help='Indent length (1-8, default=1)')
+    parser.add_argument('--indent-char', '-C',
+            default='.', metavar='CH', help='Indent character (default=%(default)s)')
     parser.add_argument('--plain', '-p', action='store_true',
             help='Plain output on stdout, no less')
     parser.add_argument('--cut', '-c', action='store_true',

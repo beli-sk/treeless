@@ -36,7 +36,7 @@ Use
 
     usage: treeless [-h] [--filematch REGEXP] [--dirmatch REGEXP]
                     [--fileignore REGEXP] [--dirignore REGEXP] [--indent N]
-                    [--plain] [--cut] [--version]
+                    [--indent-char CH] [--plain] [--cut] [--version]
     
     Treeless - Text mode directory tree viewer
     
@@ -51,6 +51,8 @@ Use
       --dirignore REGEXP, -D REGEXP
                             Regexp for ignored directories
       --indent N, -i N      Indent length (1-8, default=1)
+      --indent-char CH, -C CH
+                            Indent character (default=.)
       --plain, -p           Plain output on stdout, no less
       --cut, -c             Cut off long lines to fit terminal width
       --version, -v         Show version and exit
