@@ -22,6 +22,12 @@
 import argparse
 from treeless import output_tree, less_control, __version__
 
+def char(s):
+    if len(s) != 1:
+        raise argparse.ArgumentTypeError('single character required')
+    else:
+        return s
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
             description='Treeless - Text mode directory tree viewer')
@@ -35,7 +41,7 @@ if __name__ == '__main__':
             help='Regexp for ignored directories')
     parser.add_argument('--indent', '-i', type=int, choices=xrange(1,9),
             default=1, metavar='N', help='Indent length (1-8, default=1)')
-    parser.add_argument('--indent-char', '-C',
+    parser.add_argument('--indent-char', '-C', type=char,
             default='.', metavar='CH', help='Indent character (default=%(default)s)')
     parser.add_argument('--plain', '-p', action='store_true',
             help='Plain output on stdout, no less')
