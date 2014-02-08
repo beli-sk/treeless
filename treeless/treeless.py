@@ -80,7 +80,7 @@ def output_tree(config, fd=sys.stdout):
         width, height = _get_terminal_size_linux()
     else:
         width = None
-    indentstr = '.' + ' ' * (config.indent - 1)
+    indentstr = config.indent_char + ' ' * (config.indent - 1)
     for root, dirs, files in os.walk('.'):
         if root != prev_root:
             prev_root = root
