@@ -23,7 +23,7 @@ import sys
 import struct
 import subprocess
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 def _get_terminal_size_linux():
     # taken from https://gist.github.com/jtriley/1108174
