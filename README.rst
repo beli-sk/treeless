@@ -23,7 +23,7 @@ page. If you find that inconvenient or have some security concerns, you could
 also drop me a line at <devel@beli.sk>.
 
 Install
-~~~~~~~
+-------
 
 ::
 
