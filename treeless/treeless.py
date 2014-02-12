@@ -51,12 +51,20 @@ def _get_terminal_size_linux():
             return None
     return int(cr[1]), int(cr[0])
 
+def str2bool(s):
+    if s.lower() in ('1', 'yes', 'true', 'on'):
+        return True
+    elif s.lower() in ('0', 'no', 'false', 'off'):
+        return False
+    else:
+        raise ValueError('Invalid boolean value "%s"' % s)
+
 def echo(s, fd=sys.stdout):
     fd.write(str(s))
 
 def echoln(s, indent=0, indentstr='.', maxwidth=None, fd=sys.stdout):
     if indent:
-        outs = ''.join(indentstr for i in range(indent)) + str(s)
+        outs = (indentstr * indent) + str(s)
     else:
         outs = '' + str(s)
     if maxwidth and len(outs) > maxwidth:
@@ -81,6 +89,7 @@ def output_tree(config, fd=sys.stdout):
     else:
         width = None
     indentstr = config.indent_char + ' ' * (config.indent - 1)
+    os.chdir(config.path)
     for root, dirs, files in os.walk('.'):
         if root != prev_root:
             prev_root = root

@@ -19,8 +19,33 @@
 # You should have received a copy of the GNU General Public License
 # along with Treeless.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
+import sys
 import argparse
-from treeless import output_tree, less_control, __version__
+import traceback
+import ConfigParser
+from treeless import output_tree, less_control, str2bool, __version__
+
+DEBUG = False
+
+# List of config files where items from the latter override those from
+# the former. Command line arguments override those from config files.
+CONFIG_FILES = (
+        '/etc/treeless.conf',
+        '~/.config/treeless.conf',
+        '~/.treeless.conf',
+        )
+
+CONFIG_ITEM_TYPES = {
+        # 'item_name': (type_function, choices)
+        'filematch': (str, None),
+        'dirmatch': (str, None),
+        'fileignore': (str, None),
+        'dirignore': (str, None),
+        'indent': (int, range(1,9)),
+        'plain': (str2bool, None),
+        'cut': (str2bool, None),
+        }
 
 def char(s):
     if len(s) != 1:
@@ -29,8 +54,34 @@ def char(s):
         return s
 
 if __name__ == '__main__':
+    # config file(s)
+    try:
+        cp = ConfigParser.SafeConfigParser()
+        cp.read([os.path.expanduser(x) for x in CONFIG_FILES])
+        defaults = dict()
+        for k, tc in CONFIG_ITEM_TYPES.iteritems():
+            t, c = tc
+            try:
+                v = t(cp.get('treeless', k))
+                if c is not None and v not in c:
+                    raise ValueError('Invalid value "%s" for option "%s"' % (v, k))
+                defaults[k] = t(cp.get('treeless', k))
+            except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
+                pass
+        del(cp)
+    except:
+        if DEBUG:
+            exc_str = traceback.format_exc()
+        else:
+            exc_str = traceback.format_exception_only(sys.exc_type, sys.exc_value)[-1]
+        sys.stderr.write('Error reading config file: %s' % exc_str)
+        sys.exit(1)
+
+    # command line args
     parser = argparse.ArgumentParser(
             description='Treeless - Text mode directory tree viewer')
+    parser.add_argument('path', default='.', nargs='?',
+            help='Base path to start listing from')
     parser.add_argument('--filematch', '-f', default=None, metavar='REGEXP',
             help='Files regexp')
     parser.add_argument('--dirmatch', '-d', default=None, metavar='REGEXP',
@@ -50,6 +101,7 @@ if __name__ == '__main__':
     parser.add_argument('--version', '-v', action='version',
             version='Treeless ' + __version__,
             help='Show version and exit')
+    parser.set_defaults(**defaults)
     config = parser.parse_args()
     if config.plain:
         output_tree(config)
